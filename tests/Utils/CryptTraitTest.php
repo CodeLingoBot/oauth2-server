@@ -29,13 +29,5 @@ class CryptTraitTest extends TestCase
         $this->encryptDecrypt();
     }
 
-    private function encryptDecrypt()
-    {
-        $payload = 'alex loves whisky';
-        $encrypted = $this->cryptStub->doEncrypt($payload);
-        $plainText = $this->cryptStub->doDecrypt($encrypted);
-
-        $this->assertNotEquals($payload, $encrypted);
-        $this->assertEquals($payload, $plainText);
-    }
+    
 }

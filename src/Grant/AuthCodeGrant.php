@@ -170,33 +170,7 @@ class AuthCodeGrant extends AbstractAuthorizeGrant
      * @param ClientEntityInterface  $client
      * @param ServerRequestInterface $request
      */
-    private function validateAuthorizationCode(
-        $authCodePayload,
-        ClientEntityInterface $client,
-        ServerRequestInterface $request
-    ) {
-        if (time() > $authCodePayload->expire_time) {
-            throw OAuthServerException::invalidRequest('code', 'Authorization code has expired');
-        }
-
-        if ($this->authCodeRepository->isAuthCodeRevoked($authCodePayload->auth_code_id) === true) {
-            throw OAuthServerException::invalidRequest('code', 'Authorization code has been revoked');
-        }
-
-        if ($authCodePayload->client_id !== $client->getIdentifier()) {
-            throw OAuthServerException::invalidRequest('code', 'Authorization code was not issued to this client');
-        }
-
-        // The redirect URI is required in this request
-        $redirectUri = $this->getRequestParameter('redirect_uri', $request, null);
-        if (empty($authCodePayload->redirect_uri) === false && $redirectUri === null) {
-            throw OAuthServerException::invalidRequest('redirect_uri');
-        }
-
-        if ($authCodePayload->redirect_uri !== $redirectUri) {
-            throw OAuthServerException::invalidRequest('redirect_uri', 'Invalid redirect URI');
-        }
-    }
+    
 
     /**
      * Return the grant identifier that can be used in matching up requests.
@@ -380,10 +354,5 @@ class AuthCodeGrant extends AbstractAuthorizeGrant
      *
      * @return string
      */
-    private function getClientRedirectUri(AuthorizationRequest $authorizationRequest)
-    {
-        return \is_array($authorizationRequest->getClient()->getRedirectUri())
-                ? $authorizationRequest->getClient()->getRedirectUri()[0]
-                : $authorizationRequest->getClient()->getRedirectUri();
-    }
+    
 }

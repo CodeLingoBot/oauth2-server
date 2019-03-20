@@ -71,35 +71,7 @@ class CryptKey
      *
      * @return string
      */
-    private function saveKeyToFile($key)
-    {
-        $tmpDir = sys_get_temp_dir();
-        $keyPath = $tmpDir . '/' . sha1($key) . '.key';
-
-        if (file_exists($keyPath)) {
-            return 'file://' . $keyPath;
-        }
-
-        if (!touch($keyPath)) {
-            // @codeCoverageIgnoreStart
-            throw new RuntimeException(sprintf('"%s" key file could not be created', $keyPath));
-            // @codeCoverageIgnoreEnd
-        }
-
-        if (file_put_contents($keyPath, $key) === false) {
-            // @codeCoverageIgnoreStart
-            throw new RuntimeException(sprintf('Unable to write key file to temporary directory "%s"', $tmpDir));
-            // @codeCoverageIgnoreEnd
-        }
-
-        if (chmod($keyPath, 0600) === false) {
-            // @codeCoverageIgnoreStart
-            throw new RuntimeException(sprintf('The key file "%s" file mode could not be changed with chmod to 600', $keyPath));
-            // @codeCoverageIgnoreEnd
-        }
-
-        return 'file://' . $keyPath;
-    }
+    
 
     /**
      * Retrieve key path.
